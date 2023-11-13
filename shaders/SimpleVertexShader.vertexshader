@@ -1,0 +1,30 @@
+#version 330 core
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec2 vertexUV;
+layout(location = 2) in vec3 vertexNormal;
+
+out vec2 UV;
+out vec3 FragPos;  // Position du fragment dans l'espace monde
+out vec3 Normal;   // Normale du fragment dans l'espace monde
+out vec3 LightDir; // Vecteur de la lumière
+
+uniform mat4 MVP;
+uniform mat4 M;    // Matrice modèle
+uniform vec3 lightPos; // Position de la lumière
+
+void main(){
+    gl_Position = MVP * vec4(vertexPosition_modelspace, 1.0);
+    UV = vertexUV;
+
+    // Transformation de la normale (si nécessaire)
+    vec4 transformedNormal = M * vec4(vertexNormal, 0.0);  // 0.0 pour les normales
+    Normal = vec3(transformedNormal);
+
+    // Calcul du vecteur de la lumière dans l'espace objet (si nécessaire)
+    // Utilisation de la position de la lumière pour calculer la direction
+    vec4 worldPos = M * vec4(vertexPosition_modelspace, 1.0);
+    LightDir = normalize(lightPos - vec3(worldPos));
+
+    // Passer la position du fragment dans l'espace monde au fragment shader
+    FragPos = vec3(worldPos);
+}
