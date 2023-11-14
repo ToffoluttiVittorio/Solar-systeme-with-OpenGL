@@ -4,7 +4,7 @@
 NavigationControls::NavigationControls(GLFWwindow *window, Camera *camera):Controls(window, camera), lastPosCursor(-1,-1)
 {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    mouseSpeed = 0.02;
+    mouseSpeed = 0.1;
 }
 
 void NavigationControls::update(float deltaTime, Shader *shader)

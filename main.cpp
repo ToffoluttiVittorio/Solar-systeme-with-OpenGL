@@ -11,6 +11,7 @@
 #include "renderer.h"
 #include "camera.h"
 #include "navigationcontrols.h"
+#include "pointlight.h"
 
 
 
@@ -70,11 +71,6 @@ int main()
         return -1;
     }
 
-///////////////////Elipse/////////////////////////////////////////////////////////////
-    double a = 2.0; // Demi-axe horizontal
-    double b = 1.0; // Demi-axe vertical
-    double speed = 1.0; // Vitesse de déplacement
-    double angle = 0.0; // Angle initial
 
 /////////////////////////On crée un Renderer/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -99,124 +95,117 @@ int main()
 /////////////////////////Création des formes à afficher/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    vector<glm::vec3> g_vertex_buffer_data = {
-        glm::vec3(-1.0f,-1.0f,-1.0f), // triangle 1 : begin
-        glm::vec3(-1.0f,-1.0f, 1.0f),
-        glm::vec3(-1.0f, 1.0f, 1.0f), // triangle 1 : end
-        glm::vec3(1.0f, 1.0f,-1.0f), // triangle 2 : begin
-        glm::vec3(-1.0f,-1.0f,-1.0f),
-        glm::vec3(-1.0f, 1.0f,-1.0f), // triangle 2 : end
-        glm::vec3(1.0f,-1.0f, 1.0f),
-        glm::vec3(-1.0f,-1.0f,-1.0f),
-        glm::vec3(1.0f,-1.0f,-1.0f),
-        glm::vec3(1.0f, 1.0f,-1.0f),
-        glm::vec3(1.0f,-1.0f,-1.0f),
-        glm::vec3(-1.0f,-1.0f,-1.0f),
-        glm::vec3(-1.0f,-1.0f,-1.0f),
-        glm::vec3(-1.0f, 1.0f, 1.0f),
-        glm::vec3(-1.0f, 1.0f,-1.0f),
-        glm::vec3(1.0f,-1.0f, 1.0f),
-        glm::vec3(-1.0f,-1.0f, 1.0f),
-        glm::vec3(-1.0f,-1.0f,-1.0f),
-        glm::vec3(-1.0f, 1.0f, 1.0f),
-        glm::vec3(-1.0f,-1.0f, 1.0f),
-        glm::vec3(1.0f,-1.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f,-1.0f,-1.0f),
-        glm::vec3(1.0f, 1.0f,-1.0f),
-        glm::vec3(1.0f,-1.0f,-1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f,-1.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f,-1.0f),
-        glm::vec3(-1.0f, 1.0f,-1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(-1.0f, 1.0f,-1.0f),
-        glm::vec3(-1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(-1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f,-1.0f, 1.0f)
-    };
+//    vector<glm::vec3> g_vertex_buffer_data = {
+//        glm::vec3(-1.0f,-1.0f,-1.0f), // triangle 1 : begin
+//        glm::vec3(-1.0f,-1.0f, 1.0f),
+//        glm::vec3(-1.0f, 1.0f, 1.0f), // triangle 1 : end
+//        glm::vec3(1.0f, 1.0f,-1.0f), // triangle 2 : begin
+//        glm::vec3(-1.0f,-1.0f,-1.0f),
+//        glm::vec3(-1.0f, 1.0f,-1.0f), // triangle 2 : end
+//        glm::vec3(1.0f,-1.0f, 1.0f),
+//        glm::vec3(-1.0f,-1.0f,-1.0f),
+//        glm::vec3(1.0f,-1.0f,-1.0f),
+//        glm::vec3(1.0f, 1.0f,-1.0f),
+//        glm::vec3(1.0f,-1.0f,-1.0f),
+//        glm::vec3(-1.0f,-1.0f,-1.0f),
+//        glm::vec3(-1.0f,-1.0f,-1.0f),
+//        glm::vec3(-1.0f, 1.0f, 1.0f),
+//        glm::vec3(-1.0f, 1.0f,-1.0f),
+//        glm::vec3(1.0f,-1.0f, 1.0f),
+//        glm::vec3(-1.0f,-1.0f, 1.0f),
+//        glm::vec3(-1.0f,-1.0f,-1.0f),
+//        glm::vec3(-1.0f, 1.0f, 1.0f),
+//        glm::vec3(-1.0f,-1.0f, 1.0f),
+//        glm::vec3(1.0f,-1.0f, 1.0f),
+//        glm::vec3(1.0f, 1.0f, 1.0f),
+//        glm::vec3(1.0f,-1.0f,-1.0f),
+//        glm::vec3(1.0f, 1.0f,-1.0f),
+//        glm::vec3(1.0f,-1.0f,-1.0f),
+//        glm::vec3(1.0f, 1.0f, 1.0f),
+//        glm::vec3(1.0f,-1.0f, 1.0f),
+//        glm::vec3(1.0f, 1.0f, 1.0f),
+//        glm::vec3(1.0f, 1.0f,-1.0f),
+//        glm::vec3(-1.0f, 1.0f,-1.0f),
+//        glm::vec3(1.0f, 1.0f, 1.0f),
+//        glm::vec3(-1.0f, 1.0f,-1.0f),
+//        glm::vec3(-1.0f, 1.0f, 1.0f),
+//        glm::vec3(1.0f, 1.0f, 1.0f),
+//        glm::vec3(-1.0f, 1.0f, 1.0f),
+//        glm::vec3(1.0f,-1.0f, 1.0f)
+//    };
 
-    vector<glm::vec2> g_uv_buffer_data = {
-        glm::vec2(0.000059f, 1.0f-0.000004f),
-        glm::vec2(0.000103f, 1.0f-0.336048f),
-        glm::vec2(0.335973f, 1.0f-0.335903f),
-        glm::vec2(1.000023f, 1.0f-0.000013f),
-        glm::vec2(0.667979f, 1.0f-0.335851f),
-        glm::vec2(0.999958f, 1.0f-0.336064f),
-        glm::vec2(0.667979f, 1.0f-0.335851f),
-        glm::vec2(0.336024f, 1.0f-0.671877f),
-        glm::vec2(0.667969f, 1.0f-0.671889f),
-        glm::vec2(1.000023f, 1.0f-0.000013f),
-        glm::vec2(0.668104f, 1.0f-0.000013f),
-        glm::vec2(0.667979f, 1.0f-0.335851f),
-        glm::vec2(0.000059f, 1.0f-0.000004f),
-        glm::vec2(0.335973f, 1.0f-0.335903f),
-        glm::vec2(0.336098f, 1.0f-0.000071f),
-        glm::vec2(0.667979f, 1.0f-0.335851f),
-        glm::vec2(0.335973f, 1.0f-0.335903f),
-        glm::vec2(0.336024f, 1.0f-0.671877f),
-        glm::vec2(1.000004f, 1.0f-0.671847f),
-        glm::vec2(0.999958f, 1.0f-0.336064f),
-        glm::vec2(0.667979f, 1.0f-0.335851f),
-        glm::vec2(0.668104f, 1.0f-0.000013f),
-        glm::vec2(0.335973f, 1.0f-0.335903f),
-        glm::vec2(0.667979f, 1.0f-0.335851f),
-        glm::vec2(0.335973f, 1.0f-0.335903f),
-        glm::vec2(0.668104f, 1.0f-0.000013f),
-        glm::vec2(0.336098f, 1.0f-0.000071f),
-        glm::vec2(0.000103f, 1.0f-0.336048f),
-        glm::vec2(0.000004f, 1.0f-0.671870f),
-        glm::vec2(0.336024f, 1.0f-0.671877f),
-        glm::vec2(0.000103f, 1.0f-0.336048f),
-        glm::vec2(0.336024f, 1.0f-0.671877f),
-        glm::vec2(0.335973f, 1.0f-0.335903f),
-        glm::vec2(0.667969f, 1.0f-0.671889f),
-        glm::vec2(1.000004f, 1.0f-0.671847f),
-        glm::vec2(0.667979f, 1.0f-0.335851f)
-    };
+//    vector<glm::vec2> g_uv_buffer_data = {
+//        glm::vec2(0.000059f, 1.0f-0.000004f),
+//        glm::vec2(0.000103f, 1.0f-0.336048f),
+//        glm::vec2(0.335973f, 1.0f-0.335903f),
+//        glm::vec2(1.000023f, 1.0f-0.000013f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f),
+//        glm::vec2(0.999958f, 1.0f-0.336064f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f),
+//        glm::vec2(0.336024f, 1.0f-0.671877f),
+//        glm::vec2(0.667969f, 1.0f-0.671889f),
+//        glm::vec2(1.000023f, 1.0f-0.000013f),
+//        glm::vec2(0.668104f, 1.0f-0.000013f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f),
+//        glm::vec2(0.000059f, 1.0f-0.000004f),
+//        glm::vec2(0.335973f, 1.0f-0.335903f),
+//        glm::vec2(0.336098f, 1.0f-0.000071f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f),
+//        glm::vec2(0.335973f, 1.0f-0.335903f),
+//        glm::vec2(0.336024f, 1.0f-0.671877f),
+//        glm::vec2(1.000004f, 1.0f-0.671847f),
+//        glm::vec2(0.999958f, 1.0f-0.336064f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f),
+//        glm::vec2(0.668104f, 1.0f-0.000013f),
+//        glm::vec2(0.335973f, 1.0f-0.335903f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f),
+//        glm::vec2(0.335973f, 1.0f-0.335903f),
+//        glm::vec2(0.668104f, 1.0f-0.000013f),
+//        glm::vec2(0.336098f, 1.0f-0.000071f),
+//        glm::vec2(0.000103f, 1.0f-0.336048f),
+//        glm::vec2(0.000004f, 1.0f-0.671870f),
+//        glm::vec2(0.336024f, 1.0f-0.671877f),
+//        glm::vec2(0.000103f, 1.0f-0.336048f),
+//        glm::vec2(0.336024f, 1.0f-0.671877f),
+//        glm::vec2(0.335973f, 1.0f-0.335903f),
+//        glm::vec2(0.667969f, 1.0f-0.671889f),
+//        glm::vec2(1.000004f, 1.0f-0.671847f),
+//        glm::vec2(0.667979f, 1.0f-0.335851f)
+//    };
 
-    Object o(g_vertex_buffer_data, g_uv_buffer_data, path+"/OGL_TP/ressources/textures/roche.jpg");
+//    Object o(g_vertex_buffer_data, g_uv_buffer_data, path+"/OGL_TP/ressources/textures/roche.jpg");
 
 ////////////////////////////// Fichier obj //////////////////////////
 
-//    Object o(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/roche.jpg");
+    Object o(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/roche.jpg");
 
 /////////////////////////Création de la matrice MVP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    cam.computeMatrices(width, height);
-    glm::mat4 m = o.getModelMatrix();
-    glm::mat4 v = cam.getViewMatrix();
-    glm::mat4 p = cam.getProjectionMatrix();
+//    cam.computeMatrices(width, height);
+//    glm::mat4 m = o.getModelMatrix();
+//    glm::mat4 v = cam.getViewMatrix();
+//    glm::mat4 p = cam.getProjectionMatrix();
 
-    glm::mat4 mvp = p*v*m;
+//    glm::mat4 mvp = p*v*m;
 
-    shader.setUniformMat4f("MVP", mvp);
+//    shader.setUniformMat4f("MVP", mvp);
+//    shader.setUniformMat4f("m", m);
 
     ///Light
 
-    // Position de la lumière
-    glm::vec3 lightPosition(0.0f, 0.0f, 0.0f); // Exemple de position de la lumière
+//    // Position de la lumière
+//    glm::vec3 lightPosition(2.0f, 2.0f, 2.0f);
+//    // Couleur de la lumière
+//    glm::vec3 lightColor(5.0f, 1.0f, 1.0f);
+//    //Intensité de la lumière
+//    float intensity(100.0f);
 
-    // Vecteur normal de la surface (cela dépend de vos données d'objets)
-    glm::vec3 surfaceNormal(1.0f, 1.0f, 0.0f); // Exemple de normale de la surface
+//    PointLight pointlight(lightPosition, lightColor, intensity);
 
-    // Couleur de la lumière
-    glm::vec3 lightColor(15.0f, 0.0f, 0.0f); // Couleur de la lumière
+//    shader.setUniform3fv("pointlight", lightColor);
+//    shader.setUniform1f("pointlightpower", intensity);
 
-    // Forces de lumière ambiante et diffuse
-    float ambientStrength = 0.4f; // Force de la lumière ambiante
-    float diffuseStrength = 0.5f; // Force de la lumière diffuse
-
-    // Envoi des données au shader
-    shader.setUniform3fv("lightPos", lightPosition);
-    shader.setUniform3fv("lightColor", lightColor);
-    shader.setUniform1f("ambientStrength", ambientStrength);
-    shader.setUniform1f("diffuseStrength", diffuseStrength);
-    shader.setUniform3fv("fragmentNormal", surfaceNormal);
-
-    o.position.x = 0;
+    o.position.x = 3;
     o.position.y = 0;
 
 
@@ -242,46 +231,43 @@ int main()
         currentTime = glfwGetTime();
         deltaTime = currentTime-lastTime;
         lastTime = currentTime;
-
         o.rotationAngles.y=currentTime;
 
-        // Calculez la position de l'objet sur l'ellipse
-        double x = a * cos(angle);
-        double y = b * sin(angle);
+        renderer.Clear();
 
-        // Mettez à jour la position de votre objet
-//        o.position.x = x;
-//        o.position.y = y;
-
-        // Dessinez votre objet avec la nouvelle position
-
-        // Mettez à jour l'angle pour le déplacement continu
-        angle += speed * 0.02; // Ajustez la valeur pour la vitesse de déplacement
 
         controls.update(deltaTime, &shader);
+
         cam.computeMatrices(width, height);
-        m = o.getModelMatrix();
-        v = cam.getViewMatrix();
-        p = cam.getProjectionMatrix();
 
-        mvp = p*v*m;
+        glm::mat4 modelMatrix = o.getModelMatrix();
+
+        glm::mat4 v = cam.getViewMatrix();
+        glm::mat4 p = cam.getProjectionMatrix();
+
+        glm::mat4 mvp = p * v * modelMatrix;
+
         shader.setUniformMat4f("MVP", mvp);
+        shader.setUniformMat4f("m", modelMatrix);
 
-        // Temps pour l'animation
-        float time = glfwGetTime();
+        glm::vec3 lightPosition(5.0f, 5.0f, 5.0f);
+        shader.setUniform3fv("pointlight", lightPosition);
 
-        // Changement couleur ambiante
-        float colorChangeSpeed = 1.0f;
+        // Lumière ambiante
+        float ambientStrength = 0.5f;
+        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+        shader.setUniform3fv("lightColor", lightColor);
+        shader.setUniform1f("ambientStrength", ambientStrength);
 
-        float red = 0.5f + 0.5f * sin(time * colorChangeSpeed);
-        float green = 0.5f + 0.5f * sin(time * colorChangeSpeed + glm::two_pi<float>() / 3.0f);
-        float blue = 0.5f + 0.5f * sin(time * colorChangeSpeed + 2.0f * glm::two_pi<float>());
+        // Lumière diffuse
+        float diffuseStrength = 0.9f;
+        glm::vec3 diffuselightColor(5.0f, 1.0f, 1.0f);
+        shader.setUniform3fv("diffuselightColor", diffuselightColor);
+        shader.setUniform1f("diffuseStrength", diffuseStrength);
 
-//        glm::vec3 ambientLightColor(red, green, blue);
-//        shader.setUniform3fv("ambientLightColor",ambientLightColor);
 
         ////////////////On commence par vider les buffers///////////////
-        renderer.Clear();
+
         renderer.Draw(va, o, shader);
 
         ////////////////Partie rafraichissement de l'image et des évènements///////////////

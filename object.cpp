@@ -50,7 +50,9 @@ void Object::Bind() const
 {
     m_vb->Bind(0);
     if (m_uvsb) m_uvsb->Bind(1);
+    if (m_normalsb) m_normalsb->Bind(2);
     if (m_texture) m_texture->Bind(0);
+
 }
 
 void Object::Unbind() const

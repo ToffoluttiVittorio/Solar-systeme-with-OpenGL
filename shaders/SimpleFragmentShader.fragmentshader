@@ -1,31 +1,35 @@
 #version 330 core
 
+
 in vec2 UV;
-in vec3 FragPos;
-in vec3 Normal;
-in vec3 LightDir; // Si vous avez envoyé la direction de la lumière depuis le vertex shader
+in vec4 ObjLum;
+in vec4 Normal;
 
-out vec4 FragColor;
+out vec3 color;
 
-uniform sampler2D texture_diffuse;
+uniform sampler2D myTextureSampler;
 uniform vec3 lightColor;
+uniform vec3 diffuselightColor;
 uniform float ambientStrength;
 uniform float diffuseStrength;
 
+
 void main() {
+
     // Couleur de la texture
-    vec3 texColor = texture(texture_diffuse, UV).rgb;
+    vec3 texColor = texture(myTextureSampler, UV).rgb;
 
-    // Lumière ambiante
-    vec3 ambient = ambientStrength * texColor;
+    ///////////// Lumière ambiante
+    vec3 ambient = lightColor * ambientStrength * texColor;
 
-    // Diffuse
-    float diff = max(dot(normalize(Normal), normalize(LightDir)), 0.0);
-    vec3 diffuse = diffuseStrength * diff * lightColor;
-
+    /////////////// Diffuse
+    vec3 objLumDir = normalize(ObjLum.xyz);
+    vec3 normal = normalize(Normal.xyz);
+    float diff = clamp(dot(normal, objLumDir), 0.0,1);
+    vec3 diffuse = diffuseStrength * diff * diffuselightColor;
+    
     // Couleur finale
-    vec3 result = (ambient + diffuse) * texColor;
+    color = (ambient + diffuse) * texColor;
 
-    FragColor = vec4(result, 1.0);
 }
 
