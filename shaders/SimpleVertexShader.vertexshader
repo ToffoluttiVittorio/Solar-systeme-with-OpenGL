@@ -8,11 +8,12 @@ layout(location = 2) in vec3 vertexNormal;
 out vec2 UV;
 out vec4 ObjLum;
 out vec4 Normal;
-
+out vec4 ObjCamDir;
 
 uniform mat4 MVP;
 uniform mat4 m;
 uniform vec3 LightPos; 
+uniform vec3 camPosition;
 
 
 void main(){
@@ -26,4 +27,8 @@ void main(){
     // Calcul du vecteur objet-lumière
     vec4 lightPos = vec4(LightPos, 1.0);
     ObjLum = lightPos - (m * vec4(vertexPosition_modelspace, 1.0));
+    
+    //Calcul de la camera 
+    ObjCamDir = vec4(camPosition - (vec3(m * vec4(vertexPosition_modelspace, 1.0))), 0);
+
 }

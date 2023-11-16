@@ -76,7 +76,6 @@ int main()
 
     Renderer renderer;
 
-
 /////////////////////////On crée un Shader/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Shader shader(path+"/OGL_TP/shaders/SimpleVertexShader.vertexshader", path+"/OGL_TP/shaders/SimpleFragmentShader.fragmentshader");
@@ -175,9 +174,30 @@ int main()
 
 //    Object o(g_vertex_buffer_data, g_uv_buffer_data, path+"/OGL_TP/ressources/textures/roche.jpg");
 
-////////////////////////////// Fichier obj //////////////////////////
+    ////////////////////////////// Fichier obj //////////////////////////
 
-    Object o(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/roche.jpg");
+    std::vector<Object*> planets;
+
+    Object sun(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_sun.jpg");
+    Object mercury(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_mercury.jpg");
+    Object venus(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_venus_surface.jpg");
+    Object earth(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_earth_daymap.jpg");
+    Object mars(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_mars.jpg");
+    Object jupiter(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_jupiter.jpg");
+    Object saturn(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_saturn.jpg");
+    Object uranus(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_uranus.jpg");
+    Object neptune(path+"/OGL_TP/planete.obj",path+"/OGL_TP/ressources/textures/2k_neptune.jpg");
+
+    planets.push_back(&sun);
+    planets.push_back(&mercury);
+    planets.push_back(&venus);
+    planets.push_back(&earth);
+    planets.push_back(&mars);
+    planets.push_back(&jupiter);
+    planets.push_back(&saturn);
+    planets.push_back(&uranus);
+    planets.push_back(&neptune);
+
 
 /////////////////////////Création de la matrice MVP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -205,8 +225,36 @@ int main()
 //    shader.setUniform3fv("pointlight", lightColor);
 //    shader.setUniform1f("pointlightpower", intensity);
 
-    o.position.x = 3;
-    o.position.y = 0;
+    /////////////////////////////// Position des planètes
+
+
+    sun.position.x = 0;
+    sun.position.y = 0;
+
+    mercury.position.x = 5;
+    mercury.position.y = 0;
+
+    venus.position.x = 10;
+    venus.position.y = 0;
+
+    earth.position.x = 15;
+    earth.position.y = 0;
+
+    mars.position.x = 20;
+    mars.position.y = 0;
+
+    jupiter.position.x = 25;
+    jupiter.position.y = 0;
+
+    saturn.position.x = 30;
+    saturn.position.y = 0;
+
+    uranus.position.x = 35;
+    uranus.position.y = 0;
+
+    neptune.position.x = 40;
+    neptune.position.y = 0;
+
 
 
 /////////////////////////Boucle de rendu/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +264,7 @@ int main()
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     //On indique la couleur de fond
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+//    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
     //On autorise les tests de profondeur
 
@@ -228,30 +276,29 @@ int main()
 
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window)){
 
+
         currentTime = glfwGetTime();
         deltaTime = currentTime-lastTime;
         lastTime = currentTime;
-        o.rotationAngles.y=currentTime;
 
         renderer.Clear();
 
-
         controls.update(deltaTime, &shader);
-
         cam.computeMatrices(width, height);
 
-        glm::mat4 modelMatrix = o.getModelMatrix();
 
+
+//        sun.rotationAngles.y=currentTime;
+
+//        glm::mat4 modelMatrix = sun.getModelMatrix();
         glm::mat4 v = cam.getViewMatrix();
         glm::mat4 p = cam.getProjectionMatrix();
+//        glm::mat4 mvp = p * v * modelMatrix;
+//        shader.setUniformMat4f("MVP", mvp);
+//        shader.setUniformMat4f("m", modelMatrix);
 
-        glm::mat4 mvp = p * v * modelMatrix;
-
-        shader.setUniformMat4f("MVP", mvp);
-        shader.setUniformMat4f("m", modelMatrix);
-
-        glm::vec3 lightPosition(5.0f, 5.0f, 5.0f);
-        shader.setUniform3fv("pointlight", lightPosition);
+//        renderer.Draw(va, sun, shader);
+//        renderer.Draw(va, earth, shader);
 
         // Lumière ambiante
         float ambientStrength = 0.5f;
@@ -260,15 +307,31 @@ int main()
         shader.setUniform1f("ambientStrength", ambientStrength);
 
         // Lumière diffuse
-        float diffuseStrength = 0.9f;
-        glm::vec3 diffuselightColor(5.0f, 1.0f, 1.0f);
+        float diffuseStrength = 0.7f;
+        glm::vec3 diffuselightColor(1.0f, 1.0f, 1.0f);
         shader.setUniform3fv("diffuselightColor", diffuselightColor);
         shader.setUniform1f("diffuseStrength", diffuseStrength);
 
+        //Lumière spéculaire
+        float specularStrength = 0.5f;
+        glm::vec3 specularLightColor(1.0f, 10.0f, 1.0f);
+        shader.setUniform3fv("specularLightColor", specularLightColor);
+        shader.setUniform1f("specularStrength",specularStrength);
+        shader.setUniform1f("shininess",15.0f);
 
-        ////////////////On commence par vider les buffers///////////////
 
-        renderer.Draw(va, o, shader);
+        for (auto &planet : planets) {
+            // Envoyer les données spécifiques de la planète au shader
+            glm::mat4 modelMatrix = planet->getModelMatrix();
+            glm::mat4 mvp = p * v * modelMatrix;
+            shader.setUniformMat4f("MVP", mvp);
+            shader.setUniformMat4f("m", modelMatrix);
+
+
+            renderer.Draw(va, *planet, shader);
+        }
+
+        cam.Bind(&shader);
 
         ////////////////Partie rafraichissement de l'image et des évènements///////////////
         //Swap buffers : frame refresh

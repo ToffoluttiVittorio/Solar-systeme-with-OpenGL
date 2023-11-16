@@ -1,18 +1,22 @@
 #version 330 core
 
-
 in vec2 UV;
 in vec4 ObjLum;
 in vec4 Normal;
+in vec4 ObjCamDir; // Correction : Utilisation de vec4 ici pour correspondre à la sortie du vertex shader
 
 out vec3 color;
 
 uniform sampler2D myTextureSampler;
+
 uniform vec3 lightColor;
 uniform vec3 diffuselightColor;
 uniform float ambientStrength;
 uniform float diffuseStrength;
 
+uniform vec3 specularLightColor;
+uniform float specularStrength;
+uniform float shininess;
 
 void main() {
 
@@ -20,16 +24,25 @@ void main() {
     vec3 texColor = texture(myTextureSampler, UV).rgb;
 
     ///////////// Lumière ambiante
+    
     vec3 ambient = lightColor * ambientStrength * texColor;
 
     /////////////// Diffuse
+    
     vec3 objLumDir = normalize(ObjLum.xyz);
     vec3 normal = normalize(Normal.xyz);
-    float diff = clamp(dot(normal, objLumDir), 0.0,1);
+    float diff = clamp(dot(normal, objLumDir), 0.0, 1.0);
     vec3 diffuse = diffuseStrength * diff * diffuselightColor;
     
-    // Couleur finale
-    color = (ambient + diffuse) * texColor;
+    //////////////// Spéculaire
+    
+    vec3 objCamDir = normalize(ObjCamDir.xyz); // Correction : Normalisation du vecteur objet-caméra
+    vec3 reflection = reflect(-objLumDir, normal);
+    float spec = pow(max(dot(objCamDir, reflection), 0.0), shininess); // Correction : Utilisation de objCamDir
+    vec3 specular = specularStrength * spec * specularLightColor;
 
+    // Couleur finale
+    color = (ambient + diffuse + specular) * texColor; // Correction : Ajout du terme spéculaire
 }
+
 
