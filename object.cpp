@@ -18,7 +18,7 @@ Object::Object(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs, std:
 
 }
 
-Object::Object(std::string path, std::string texturePath){
+Object::Object(std::string path, std::string texturePath):scale(1.0f){
 
     m_texture = new Texture(texturePath);
 

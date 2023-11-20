@@ -40,6 +40,13 @@ void main() {
     vec3 reflection = reflect(-objLumDir, normal);
     float spec = pow(max(dot(objCamDir, reflection), 0.0), shininess); // Correction : Utilisation de objCamDir
     vec3 specular = specularStrength * spec * specularLightColor;
+    
+    // Divise par distance to light 
+    
+    float distanceToLight = length(ObjLum.xyz);
+    
+    diffuse /= distanceToLight;
+    specular /= distanceToLight;
 
     // Couleur finale
     color = (ambient + diffuse + specular) * texColor; // Correction : Ajout du terme spéculaire
