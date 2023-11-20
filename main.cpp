@@ -19,8 +19,8 @@ using namespace std;
 
 int main()
 {
-//    string path = "/home/formation/Documents/TSI_Vitto/OpenGL";
-    string path = "/home/vittorio/Documents/TSI/Open_gl/Solar-systeme-with-OpenGL";
+    string path = "/home/vittorio/Documents/TSI/OpenGL/Solar-systeme-with-OpenGL";
+
 /////////////////////////Initialisation de GLFW/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if(!glfwInit()){
@@ -79,7 +79,7 @@ int main()
 
 /////////////////////////On crée un Shader/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Shader shader("/home/vittorio/Documents/TSI/Open_gl/Solar-systeme-with-OpenGL/shaders/SimpleVertexShader.vertexshader", "/home/vittorio/Documents/TSI/Open_gl/Solar-systeme-with-OpenGL/shaders/SimpleFragmentShader.fragmentshader");
+    Shader shader(path+"/shaders/SimpleVertexShader.vertexshader", path+"/shaders/SimpleFragmentShader.fragmentshader");
     shader.Bind();
 
 /////////////////////////On crée un vertex array/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,9 +91,9 @@ int main()
 
     Camera cam(width, height);
     cam.setFoV(90);
-    cam.position = glm::vec3(-20,15,0);
+    cam.position = glm::vec3(-1,2,0);
     cam.horizontalAngle = 1.50;
-    cam.verticalAngle = 12.2;
+    cam.verticalAngle = 12.0;
     NavigationControls controls(window, &cam);
 
 /////////////////////////Création des formes à afficher/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,18 +102,24 @@ int main()
 
     ////////////////////////////// Fichier obj //////////////////////////
 
+
+    std::vector<double> semiMajorAxis_   = {0.00, 0.0, 0.390, 0.720, 1.0000, 1.520, 5.200, 9.580, 19.22, 30.05};
+    std::vector<double> eccentricity_    = {0.00, 0.0, 0.206, 0.007, 0.0170, 0.093, 0.049, 0.057, 0.046, 0.010};
+    std::vector<double> angularVelocity_ = {0.00, 0.0, 1.240, 1.170, 1.0000, 0.520, 0.080, 0.034, 0.010, 0.006};
+
     std::vector<Object*> planets;
 
-    Object sun(path+"/planete.obj",path+"/ressources/textures/2k_sun.jpg");
-    Object mercury(path+"/planete.obj",path+"/ressources/textures/2k_mercury.jpg");
-    Object venus(path+"/planete.obj",path+"/ressources/textures/2k_venus_surface.jpg");
-    Object earth(path+"/planete.obj",path+"/ressources/textures/2k_earth_daymap.jpg");
-    Object mars(path+"/planete.obj",path+"/ressources/textures/2k_mars.jpg");
-    Object jupiter(path+"/planete.obj",path+"/ressources/textures/2k_jupiter.jpg");
-    Object saturn(path+"/planete.obj",path+"/ressources/textures/2k_saturn.jpg");
-    Object uranus(path+"/planete.obj",path+"/ressources/textures/2k_uranus.jpg");
-    Object neptune(path+"/planete.obj",path+"/ressources/textures/2k_neptune.jpg");
-    Object stars(path+"/planete.obj",path+"/ressources/textures/2k_stars.jpg");
+    Object stars(path+"/planete.obj",path+"/ressources/textures/2k_stars.jpg",semiMajorAxis_[0], eccentricity_[0], angularVelocity_[0]);
+    Object sun(path+"/planete.obj",path+"/ressources/textures/2k_sun.jpg", semiMajorAxis_[1], eccentricity_[1], angularVelocity_[1]);
+    Object mercury(path+"/planete.obj",path+"/ressources/textures/2k_mercury.jpg", semiMajorAxis_[2], eccentricity_[2], angularVelocity_[2]);
+    Object venus(path+"/planete.obj",path+"/ressources/textures/2k_venus_surface.jpg", semiMajorAxis_[3], eccentricity_[3], angularVelocity_[3]);
+    Object earth(path+"/planete.obj",path+"/ressources/textures/2k_earth_daymap.jpg", semiMajorAxis_[4], eccentricity_[4], angularVelocity_[4]);
+    Object mars(path+"/planete.obj",path+"/ressources/textures/2k_mars.jpg", semiMajorAxis_[5], eccentricity_[5], angularVelocity_[5]);
+    Object jupiter(path+"/planete.obj",path+"/ressources/textures/2k_jupiter.jpg", semiMajorAxis_[6], eccentricity_[6], angularVelocity_[6]);
+    Object saturn(path+"/planete.obj",path+"/ressources/textures/2k_saturn.jpg", semiMajorAxis_[7], eccentricity_[7], angularVelocity_[7]);
+    Object uranus(path+"/planete.obj",path+"/ressources/textures/2k_uranus.jpg", semiMajorAxis_[8], eccentricity_[8], angularVelocity_[8]);
+    Object neptune(path+"/planete.obj",path+"/ressources/textures/2k_neptune.jpg", semiMajorAxis_[9], eccentricity_[9], angularVelocity_[9]);
+
 
     planets.push_back(&sun);
     planets.push_back(&mercury);
@@ -126,117 +132,29 @@ int main()
     planets.push_back(&neptune);
     planets.push_back(&stars);
 
-/////////////////////////Création de la matrice MVP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//    cam.computeMatrices(width, height);
-//    glm::mat4 m = o.getModelMatrix();
-//    glm::mat4 v = cam.getViewMatrix();
-//    glm::mat4 p = cam.getProjectionMatrix();
-
-//    glm::mat4 mvp = p*v*m;
-
-//    shader.setUniformMat4f("MVP", mvp);
-//    shader.setUniformMat4f("m", m);
-
-    ///Light
-
-//    // Position de la lumière
-//    glm::vec3 lightPosition(2.0f, 2.0f, 2.0f);
-//    // Couleur de la lumière
-//    glm::vec3 lightColor(5.0f, 1.0f, 1.0f);
-//    //Intensité de la lumière
-//    float intensity(100.0f);
-
-//    PointLight pointlight(lightPosition, lightColor, intensity);
-
-//    shader.setUniform3fv("pointlight", lightColor);
-//    shader.setUniform1f("pointlightpower", intensity);
-
-    /////////////////////////////// Position des planètes
+/////////////////////////////// Position des planètes
 
 
-    sun.position.x = 0;
-    sun.position.y = 0;
+    sun.scale = glm::vec3(0.3f, 0.3f, 0.3f);
 
-    mercury.position.x = 10;
-    mercury.position.y = 0;
+    mercury.scale = glm::vec3(0.04f,0.04f,0.04f);
 
-    float mercuryda = 58.0f; //en millions de kilomètres
-    float mercurye = 0.2f;
-    float mercuryv = 48.0f; //en km/s
+    venus.scale = glm::vec3(0.09f, 0.09f,0.09f);
 
-    venus.position.x = 15;
-    venus.position.y = 0;
+    earth.scale = glm::vec3(0.1f, 0.1f,0.1f);
 
-    float venusda = 108.0f; //en millions de kilomètres
-    float venuse = 0.0007f;
-    float venusv = 35.0f; //en km/s
+    mars.scale = glm::vec3(0.05f, 0.05f, 0.05f);
 
-    earth.position.x = 20;
-    earth.position.y = 0;
+    jupiter.scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
-    float earthda = 150.0f; //en millions de kilomètres
-    float earthe = 0.02f;
-    float earthv = 35.0f; //en km/s
+    saturn.scale = glm::vec3(0.4f,0.4f,0.4f);
 
-    mars.position.x = 25;
-    mars.position.y = 0;
+    uranus.scale = glm::vec3(0.2f, 0.2f, 0.2f);
 
-    float marsda = 230.0f; //en millions de kilomètres
-    float marse = 0.01f;
-    float marsv = 24.0f; //en km/s
+    neptune.scale = glm::vec3(0.2f, 0.2f, 0.2f);
 
-    jupiter.position.x = 40;
-    jupiter.position.y = 0;
-
-    float jupiterda = 778.0f; //en millions de kilomètres
-    float jupitere = 0.05f;
-    float jupiterv = 13.0f; //en km/s
-
-    saturn.position.x = 50;
-    saturn.position.y = 0;
-
-    float saturnda = 1427.0f; //en millions de kilomètres
-    float saturnee = 0.056f;
-    float saturnv = 10.0f; //en km/s
-
-    uranus.position.x = 60;
-    uranus.position.y = 0;
-
-    float uranusda = 2870.0f; //en millions de kilomètres
-    float uranuse = 0.046f;
-    float uranusv = 7.0f; //en km/s
-
-    neptune.position.x = 70;
-    neptune.position.y = 0;
-
-    float neptuneda = 4500.0f; //en millions de kilomètres
-    float neptunee = 0.01f;
-    float neptunev = 5.43f; //en km/s
-
-    stars.position.x = 0;
-    stars.position.y = 0;
-
-
-    sun.scale = glm::vec3(7.0f, 7.0f, 7.0f);
-
-    mercury.scale = glm::vec3(0.8f,0.8f,0.8f);
-
-    venus.scale = glm::vec3(1.5f, 1.5f,1.5f);
-
-    earth.scale = glm::vec3(1.5f, 1.5f,1.5f);
-
-    mars.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
-    jupiter.scale = glm::vec3(5.0f, 5.0f, 20.0f);
-
-    saturn.scale = glm::vec3(4.0f,4.0f,4.0f);
-
-    uranus.scale = glm::vec3(2.5f, 2.5f, 2.5f);
-
-    neptune.scale = glm::vec3(2.4f, 2.4f, 2.4f);
-
-    stars.scale = glm::vec3(100.0f, 100.0f, 100.0f);
+    stars.scale = glm::vec3(70.0f, 70.0f, 70.0f);
 
 
 
@@ -272,8 +190,16 @@ int main()
         controls.update(deltaTime, &shader);
         cam.computeMatrices(width, height);
 
+        mercury.rotationAngles.y=currentTime;
+        venus.rotationAngles.y=currentTime;
+        earth.rotationAngles.y=currentTime;
+        mars.rotationAngles.y=currentTime;
+        jupiter.rotationAngles.y=currentTime;
+        saturn.rotationAngles.y=currentTime;
+        uranus.rotationAngles.y=currentTime;
+        neptune.rotationAngles.y=currentTime;
 
-//        sun.rotationAngles.y=currentTime;
+
 
 //        glm::mat4 modelMatrix = sun.getModelMatrix();
         glm::mat4 v = cam.getViewMatrix();
@@ -292,17 +218,17 @@ int main()
 //        shader.setUniform1f("ambientStrength", ambientStrength);
 
         // Lumière diffuse
-        float diffuseStrength = 10.0f;
+        float diffuseStrength = 3.0f;
         glm::vec3 diffuselightColor(1.0f, 1.0f, 1.0f);
         shader.setUniform3fv("diffuselightColor", diffuselightColor);
         shader.setUniform1f("diffuseStrength", diffuseStrength);
 
         //Lumière spéculaire
-        float specularStrength = 5.0f;
-        glm::vec3 specularLightColor(1.0f, 1.0f, 1.0f);
+        float specularStrength = 1.0f;
+        glm::vec3 specularLightColor(0.0f, 5.0f, 0.0f);
         shader.setUniform3fv("specularLightColor", specularLightColor);
         shader.setUniform1f("specularStrength",specularStrength);
-        shader.setUniform1f("shininess",15.0f);
+        shader.setUniform1f("shininess",25.0f);
 
 
         for (auto &planet : planets) {
@@ -313,9 +239,14 @@ int main()
             shader.setUniformMat4f("MVP", mvp);
             shader.setUniformMat4f("m", modelMatrix);
             if (planet == addressof(sun) or planet == addressof(stars)){
-                shader.setUniform1f("ambientStrength", 3.0f);
+                shader.setUniform1f("ambientStrength", 2.0f);
             }else{
                  shader.setUniform1f("ambientStrength", 0.5f);
+                 double theta = planet->angularVelocity * currentTime;
+                 double r = planet->semiMajorAxis * (1 - planet->eccentricity * planet->eccentricity) / (1 + planet->eccentricity * cos(theta));
+                 planet->position.x = r * cos(theta);
+                 planet->position.z = r * sin(theta);
+
             }
 
             renderer.Draw(va, *planet, shader);

@@ -12,7 +12,7 @@ class Object
 {
 public:
     Object(std::vector< glm::vec3 > vertices, std::vector< glm::vec2 > uvs, std::string texturePath);
-    Object(std::string, std::string);
+    Object(std::string, std::string,double semiMajorAxis, double eccenticity, double angularVelocity);
     ~Object();
     void Bind() const;
     void Unbind() const;
@@ -23,6 +23,9 @@ public:
     glm::vec3 rotationAngles;
     glm::mat4 getModelMatrix();
     glm::vec3 scale;
+    double semiMajorAxis;
+    double eccentricity;
+    double angularVelocity;
 
 private:
     VertexBuffer *m_vb;
@@ -30,6 +33,8 @@ private:
     Texture *m_texture;
     std::string m_path;
     VertexBuffer *m_normalsb;
+
+
 
 
 
